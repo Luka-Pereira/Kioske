@@ -1,0 +1,201 @@
+/* ====================================
+   Styles globaux pour la page HTML et BODY
+   ==================================== */
+html, body {
+  height: 100%;          /* S'assure que html et body prennent toute la hauteur de la fenêtre */
+  margin: 0;             /* Supprime les marges par défaut du navigateur */
+  padding: 0;            /* Supprime le padding par défaut */
+}
+
+body {
+  font-family: 'Montserrat', 'Open Sans', Arial, sans-serif;  /* Police principale du site */
+  background: linear-gradient(135deg, #e0e7ff 0%, #f9fafb 100%); /* Dégradé de fond clair */
+  color: #222;           /* Couleur principale du texte */
+  min-height: 100vh;     /* Hauteur minimale 100% de la fenêtre */
+  min-width: 100vw;      /* Largeur minimale 100% de la fenêtre */
+  display: flex;         /* Utilisation du Flexbox pour le layout */
+  flex-direction: column; /* Orientation verticale des enfants */
+  overflow-x: hidden;    /* Empêche le scroll horizontal */
+}
+
+/* ====================================
+   Style du TITRE PRINCIPAL (h1)
+   ==================================== */
+h1 {
+  text-align: center;            /* Centre le texte horizontalement */
+  font-size: 3.2rem;             /* Taille importante pour un titre principal */
+  margin: 40px 0;                /* Marge verticale autour du titre */
+  font-family: 'Montserrat', sans-serif; /* Police spécifique pour le titre */
+  letter-spacing: 0.06em;        /* Espacement entre les lettres pour plus d'élégance */
+  user-select: none;             /* Empêche la sélection du texte */
+  background: linear-gradient(90deg, #6366f1 30%, #06b6d4 70%); /* Dégradé coloré */
+  background-clip: text;         /* Applique le dégradé uniquement sur le texte */
+  -webkit-background-clip: text; /* Support Webkit pour background-clip */
+  color: transparent;            /* Texte transparent pour voir le dégradé */
+  -webkit-text-fill-color: transparent; /* Support Webkit pour texte transparent */
+  text-shadow:                   /* Ombre portée colorée pour effet lumineux */
+    0 4px 16px rgba(99, 102, 241, 0.6),
+    0 0 12px rgba(6, 182, 212, 0.6);
+  animation: fadeInTitle 1s ease forwards; /* Animation d'apparition */
+  filter: drop-shadow(0 2px 6px #06b6d4aa); /* Ombre portée supplémentaire */
+  perspective: 600px;            /* Perspective 3D pour effet plus profond */
+}
+
+/* Animation d'apparition du titre */
+@keyframes fadeInTitle {
+  0% { opacity: 0; transform: translateY(-30px); } /* Commence invisible et décalé vers le haut */
+  100% { opacity: 1; transform: translateY(0); }  /* Fini visible et position normale */
+}
+
+/* ====================================
+   Grille contenant les dossiers (folders)
+   ==================================== */
+.folders {
+  flex: 1 1 auto;                /* Prend tout l'espace restant */
+  display: grid;                 /* Utilisation du Grid Layout */
+  grid-template-columns: 1fr 1fr; /* 2 colonnes égales */
+  grid-template-rows: 1fr 1fr;   /* 2 lignes égales */
+  gap: 38px;                    /* Espace entre les éléments */
+  width: 100vw;                 /* Largeur pleine largeur viewport */
+  max-width: 100vw;             /* Pas plus large que la viewport */
+  height: calc(100vh - 130px); /* Hauteur pleine fenêtre moins l'espace pour titre */
+  box-sizing: border-box;       /* Inclut padding et bordures dans la taille */
+  padding: 0 38px 38px 38px;    /* Padding interne horizontal et bas */
+}
+
+/* ====================================
+   Style de chaque élément (dossier)
+   ==================================== */
+.folder {
+  background: rgba(255,255,255,0.22); /* Fond semi-transparent blanc */
+  border-radius: 32px;                /* Bords arrondis importants */
+  box-shadow: 0 8px 40px rgba(99,102,241,0.18), 0 2px 8px rgba(6,182,212,0.10); /* Ombres douces */
+  display: flex;                     /* Flex pour centrer contenu */
+  flex-direction: column;            /* Orientation verticale */
+  align-items: center;               /* Centre horizontalement */
+  justify-content: center;           /* Centre verticalement */
+  text-decoration: none;             /* Pas de soulignement (utile si lien) */
+  transition: all 0.6s cubic-bezier(.25,.8,.25,1); /* Transition fluide sur tous changements */
+  color: #222;                      /* Couleur du texte */
+  cursor: pointer;                  /* Curseur main au survol */
+  user-select: none;                /* Empêche sélection du contenu */
+  will-change: transform;           /* Optimisation GPU pour transformations */
+  position: relative;               /* Position relative pour pseudo-éléments */
+  backdrop-filter: blur(18px) saturate(1.2); /* Effet verre dépoli et saturation */
+  border: 1.5px solid rgba(99,102,241,0.13); /* Bordure légère bleutée */
+  overflow: hidden;                 /* Cache tout débordement */
+  perspective: 1000px;              /* Perspective pour les effets 3D */
+  transform-style: preserve-3d;    /* Préserve la 3D pour enfants */
+}
+
+/* ====================================
+   Effet de lumière interne animée sur chaque dossier
+   ==================================== */
+.folder::before {
+  content: "";
+  position: absolute;               /* Positionné sur tout le dossier */
+  inset: 0;                        /* Prend toute la surface */
+  border-radius: 32px;             /* Même arrondi que le dossier */
+  background: linear-gradient(120deg, #6366f1 0%, #06b6d4 100%); /* Dégradé bleu */
+  opacity: 0.08;                   /* Très translucide */
+  z-index: 0;                     /* Derrière le contenu */
+  pointer-events: none;           /* Ne gêne pas les clics */
+  animation: pulseGlow 4s ease-in-out infinite alternate; /* Animation pulsante */
+}
+
+/* Animation pulsante pour la lumière */
+@keyframes pulseGlow {
+  0% { opacity: 0.05; transform: scale(1); }
+  100% { opacity: 0.12; transform: scale(1.03); }
+}
+
+/* ====================================
+   Effets au survol ou focus clavier (effet 3D + lumière + zoom)
+   ==================================== */
+.folder:hover, .folder:focus-visible {
+  transform: rotateY(6deg) rotateX(6deg) scale(1.05); /* Rotation 3D et zoom */
+  background: rgba(236,245,255,0.65);                 /* Fond plus clair */
+  box-shadow: 0 20px 80px #6366f1cc, 0 6px 24px #06b6d488; /* Ombres plus fortes */
+  outline: none;                                      /* Pas de contour par défaut */
+}
+
+/* ====================================
+   Style des icônes à l’intérieur des dossiers
+   ==================================== */
+.folder-icon {
+  font-size: clamp(2.7rem, 8vw, 6.5rem); /* Taille adaptative selon largeur viewport */
+  margin-bottom: 18px;                    /* Espace en dessous */
+  line-height: 1;                        /* Hauteur de ligne serrée */
+  z-index: 1;                           /* Au-dessus des fonds et ombres */
+  transition: transform 0.5s ease, filter 0.3s ease; /* Transition douce */
+  filter: drop-shadow(0 4px 16px #6366f1aa); /* Ombre portée douce */
+}
+
+/* Animation sur icône au survol du dossier */
+.folder:hover .folder-icon {
+  transform: rotate(12deg) scale(1.25); /* Rotation et agrandissement */
+  filter: drop-shadow(0 8px 32px #06b6d4cc); /* Ombre portée plus marquée */
+}
+
+/* ====================================
+   Style des labels textes sous les icônes
+   ==================================== */
+.folder-label {
+  font-size: clamp(1.1rem, 2vw, 1.6rem); /* Taille adaptative */
+  font-weight: 800;                       /* Texte en gras */
+  letter-spacing: 0.04em;                 /* Espacement entre lettres */
+  text-align: center;                     /* Centré */
+  z-index: 1;                            /* Au-dessus du fond */
+  color: #6366f1;                       /* Couleur bleue */
+  text-shadow: 0 2px 8px #06b6d466;     /* Ombre douce colorée */
+  text-transform: uppercase;             /* Texte en majuscules */
+  transition: all 0.3s ease;             /* Transition douce sur couleur et ombre */
+}
+
+/* Changement de couleur et ombre au survol */
+.folder:hover .folder-label {
+  color: #06b6d4;
+  text-shadow: 0 4px 16px #6366f1bb;
+}
+
+/* ====================================
+   Animation d’apparition progressive pour chaque dossier, icône et label
+   ==================================== */
+.folder, .folder-icon, .folder-label {
+  opacity: 0;  /* Démarre invisible */
+  animation: fadeInPop 0.9s cubic-bezier(.23,1.02,.64,1) forwards; /* Animation pop */
+}
+/* Délais différents pour l’effet en cascade */
+.folder:nth-child(1) { animation-delay: 0.1s; }
+.folder:nth-child(2) { animation-delay: 0.25s; }
+.folder:nth-child(3) { animation-delay: 0.4s; }
+.folder:nth-child(4) { animation-delay: 0.55s; }
+
+/* Animation pop (apparition + léger rebond) */
+@keyframes fadeInPop {
+  0% { opacity: 0; transform: scale(0.85) translateY(40px); }
+  80% { opacity: 1; transform: scale(1.1) translateY(-5px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ====================================
+   Styles adaptatifs pour petits écrans / fenêtres plus petites
+   ==================================== */
+@media (max-width: 900px), (max-height: 700px) {
+  h1 {
+    font-size: 1.6rem; /* Titre plus petit */
+    margin: 16px 0 16px 0; /* Marges réduites */
+  }
+  .folders {
+    gap: 12px;          /* Espace réduit entre dossiers */
+    padding: 0 8px 8px 8px; /* Padding réduit */
+    height: calc(100vh - 60px); /* Hauteur plus petite */
+  }
+  .folder-icon {
+    font-size: clamp(1.5rem, 11vw, 3.5rem); /* Icônes plus petites */
+    margin-bottom: 8px; /* Espacement réduit */
+  }
+  .folder-label {
+    font-size: clamp(0.8rem, 3vw, 1rem); /* Labels plus petits */
+  }
+}

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Contenu</title>
+  <link rel="stylesheet" href="style2.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+  <a id="back" href="index.html" aria-label="Retour à la galerie principale">⬅ Retour</a>
+  <h1 id="title">Contenu</h1>
+  <div class="gallery" id="gallery" role="list"></div>
+  <div class="calendar-container" id="calendarContainer" aria-label="Calendrier Google"></div>
+
+  <script>
+    const folderId = "1TUEWbP-2mbQymRADGixWE8OmJbFO3Vlh"; // ID de dossier Google Drive
+    const apiKey = "AIzaSyALeElKfZqK0mBhhZDj5_rtyGVpob7-eqw"; // Clé API
+
+    const params = new URLSearchParams(window.location.search);
+    const type = params.get("type");
+
+    const titleMap = {
+      images: "📷 Images",
+      videos: "🎬 Vidéos",
+      pdf: "📄 PDF",
+      agenda: "🗓 Agenda Google"
+    };
+    document.getElementById("title").textContent = titleMap[type] || "Contenu du dossier";
+
+    if (type === "agenda") {
+      const calendarContainer = document.getElementById("calendarContainer");
+      const iframe = document.createElement("iframe");
+      iframe.src = "https://calendar.google.com/calendar/embed?src=pronto94500%40gmail.com&ctz=Europe%2FParis"; // URL du calendrier Google
+      iframe.setAttribute('loading', 'lazy');
+      calendarContainer.appendChild(iframe);
+    } else {
+      function matchesType(mime, type) {
+        const imageMimes = ["image/png", "image/jpeg", "image/jpg", "image/gif", "image/webp", "image/bmp", "image/svg+xml", "image/tiff"];
+        const videoMimes = ["video/mp4", "video/webm", "video/ogg", "video/x-msvideo", "video/x-matroska", "video/quicktime"];
+        if (type === "images") return imageMimes.includes(mime);
+        if (type === "videos") return videoMimes.includes(mime);
+        if (type === "pdf") return mime === "application/pdf";
+        return false;
+      }
+
+      async function listFiles() {
+        const gallery = document.getElementById("gallery");
+        gallery.innerHTML = '<div class="loader" aria-label="Chargement des fichiers"></div>';
+
+        try {
+          const res = await fetch(`https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents&key=${apiKey}&fields=files(id,name,mimeType)`);
+          const data = await res.json();
+
+          gallery.innerHTML = ""; 
+
+          if (!data.files || data.files.length === 0) {
+            gallery.innerHTML = '<p class="unsupported-file">Aucun fichier trouvé dans ce dossier.</p>';
+            return;
+          }
+
+          let hasFiles = false;
+
+          data.files.forEach((file, index) => {
+            if (!matchesType(file.mimeType, type)) return;
+
+            hasFiles = true;
+
+            const fileId = file.id;
+            const fileName = file.name;
+
+            let element;
+
+            if (type === "images") {
+              element = document.createElement("iframe");
+              element.src = `https://drive.google.com/file/d/${fileId}/preview`;
+              element.width = "320";
+              element.height = "240";
+              element.frameBorder = "0";
+              element.className = "gallery-img fade-in";
+              element.title = fileName;
+              element.tabIndex = 0;
+            } else if (type === "videos") {
+              element = document.createElement("iframe");
+              element.src = `https://drive.google.com/file/d/${fileId}/preview`;
+              element.width = "480";
+              element.height = "270";
+              element.allow = "autoplay; encrypted-media";
+              element.frameBorder = "0";
+              element.className = "gallery-video fade-in";
+              element.title = fileName;
+              element.tabIndex = 0;
+            } else if (type === "pdf") {
+              element = document.createElement("iframe");
+              element.src = `https://drive.google.com/file/d/${fileId}/preview`;
+              element.className = "gallery-iframe fade-in";
+              element.title = fileName;
+              element.tabIndex = 0;
+              element.style.width = "30%";
+              element.style.height = "200px";
+              element.frameBorder = "0";
+            }
+
+            if (element) {
+              element.style.animationDelay = `${index * 0.12}s`;
+              gallery.appendChild(element);
+            }
+          });
+
+          if (!hasFiles) {
+            gallery.innerHTML = '<p class="unsupported-file">Aucun fichier compatible trouvé.</p>';
+          }
+
+        } catch (error) {
+          gallery.innerHTML = '<p class="unsupported-file">Erreur lors du chargement des fichiers.</p>';
+          console.error(error);
+        }
+      }
+
+      listFiles();
+    }
+  </script>
+</body>
+</html>

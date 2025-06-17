@@ -1,0 +1,328 @@
+/* BASE ET FOND */
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat', 'Open Sans', sans-serif;
+  background: linear-gradient(135deg, #e0e7ff 0%, #f9fafb 100%);
+  color: #222;
+  min-height: 100vh;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* TITRE */
+h1 {
+  text-align: center;
+  font-size: 3.2rem;
+  margin: 40px 0;
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: 0.06em;
+  user-select: none;
+  background: linear-gradient(90deg, #6366f1 30%, #06b6d4 70%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  text-shadow:
+    0 4px 16px rgba(99, 102, 241, 0.6),
+    0 0 12px rgba(6, 182, 212, 0.6);
+  animation: fadeInTitle 1s ease forwards;
+  filter: drop-shadow(0 2px 6px #06b6d4aa);
+  perspective: 600px;
+}
+
+/* Animation d'apparition du titre */
+@keyframes fadeInTitle {
+  0% { opacity: 0; transform: translateY(-30px) rotateX(-15deg); }
+  100% { opacity: 1; transform: translateY(0) rotateX(0); }
+}
+
+/* CONTAINER DES DOSSIERS */
+.folders {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+  padding: 20px;
+  perspective: 1200px;
+}
+
+/* DOSSIERS */
+.folder {
+  width: 220px;
+  height: 190px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-radius: 32px;
+  border: 1.8px solid rgba(99, 102, 241, 0.25);
+  box-shadow:
+    inset 0 0 12px rgba(99, 102, 241, 0.15),
+    0 8px 40px rgba(99, 102, 241, 0.22),
+    0 2px 10px rgba(6, 182, 212, 0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #222;
+  text-decoration: none;
+  transition:
+    transform 0.6s cubic-bezier(.25,.8,.25,1),
+    background 0.5s ease,
+    box-shadow 0.5s ease;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  will-change: transform;
+  transform-style: preserve-3d;
+  overflow: hidden;
+  perspective: 1000px;
+  background-image:
+    linear-gradient(115deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 70%);
+  background-repeat: no-repeat;
+  background-position: -150% 0;
+  background-size: 200% 100%;
+  animation: shineMove 4.5s linear infinite;
+}
+
+/* Animation de mouvement de la lumière interne */
+@keyframes shineMove {
+  0% { background-position: -150% 0; }
+  100% { background-position: 150% 0; }
+}
+
+/* Effet de lumière interne pulsante */
+.folder::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(120deg, #6366f1 0%, #06b6d4 100%);
+  opacity: 0.07;
+  z-index: 0;
+  pointer-events: none;
+  animation: pulseGlow 4s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 12px #06b6d488);
+}
+
+/* Animation pulsante pour la lumière interne */
+@keyframes pulseGlow {
+  0% { opacity: 0.04; transform: scale(1); }
+  100% { opacity: 0.13; transform: scale(1.04); }
+}
+
+/* Effets au survol ou focus clavier */
+.folder:hover,
+.folder:focus-visible {
+  transform:
+    rotateY(8deg)
+    rotateX(8deg)
+    scale(1.07);
+  background: rgba(236, 245, 255, 0.75);
+  box-shadow:
+    0 25px 90px #6366f1dd,
+    0 8px 30px #06b6d488,
+    inset 0 0 12px #06b6d499;
+  outline: none;
+  background-image:
+    linear-gradient(115deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 70%);
+  animation: shineMoveHover 3s linear infinite;
+}
+
+/* Animation de mouvement de la lumière interne au survol */
+@keyframes shineMoveHover {
+  0% { background-position: -100% 0; }
+  100% { background-position: 120% 0; }
+}
+
+/* ICONES ET LABELS */
+.folder-icon {
+  font-size: 4.8rem;
+  margin-bottom: 16px;
+  z-index: 1;
+  filter: drop-shadow(0 4px 20px #6366f1bb);
+  transition: transform 0.5s ease, filter 0.3s ease, color 0.4s ease;
+  color: #6366f1;
+  will-change: transform;
+}
+
+/* Animation sur l'icône au survol du dossier */
+.folder:hover .folder-icon {
+  transform: rotate(12deg) scale(1.3);
+  filter: drop-shadow(0 10px 40px #06b6d4cc);
+  color: #06b6d4;
+}
+
+/* Labels sous les icônes */
+.folder-label {
+  font-size: 1.5rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: center;
+  z-index: 1;
+  color: #6366f1;
+  text-shadow: 0 2px 8px #06b6d466;
+  transition: color 0.35s ease, text-shadow 0.35s ease;
+  user-select: none;
+  will-change: color;
+}
+
+/* Changement de couleur et ombre au survol */
+.folder:hover .folder-label {
+  color: #06b6d4;
+  text-shadow: 0 6px 22px #6366f1bb;
+}
+
+/* Animation d'apparition progressive pour chaque dossier, icône et label */
+.folder, .folder-icon, .folder-label {
+  opacity: 0;
+  animation: fadeInPop 0.9s cubic-bezier(.23,1.02,.64,1) forwards;
+}
+
+/* Délais différents pour l'effet en cascade */
+.folder:nth-child(1) { animation-delay: 0.1s; }
+.folder:nth-child(2) { animation-delay: 0.25s; }
+.folder:nth-child(3) { animation-delay: 0.4s; }
+.folder:nth-child(4) { animation-delay: 0.55s; }
+
+/* Animation pop (apparition + léger rebond) */
+@keyframes fadeInPop {
+  0% { opacity: 0; transform: scale(0.85) translateY(40px); }
+  80% { opacity: 1; transform: scale(1.1) translateY(-5px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* BOUTON RETOUR */
+#back {
+  display: inline-block;
+  margin: 30px 0 0 24px; /* Décalage top 30px, left 24px */
+  padding: 14px 28px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #333;
+  background: #e5e5ff;
+  border-radius: 18px;
+  text-decoration: none;
+  transition: all 0.35s ease;
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.18);
+  text-align: center;
+  user-select: none;
+  cursor: pointer;
+  will-change: transform, box-shadow;
+  filter: drop-shadow(0 1px 2px #bbb);
+}
+
+/* Effets au survol ou focus clavier */
+#back:hover, #back:focus-visible {
+  background: #d5d5f9;
+  box-shadow: 0 12px 28px rgba(99, 102, 241, 0.32);
+  transform: translateY(-2px);
+}
+
+/* Animation de rebond au clic */
+#back:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.18);
+}
+
+/* GALERIE */
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 32px;
+  margin-top: 30px;
+}
+
+/* Conteneurs flex centrés pour chaque média */
+.gallery-item,
+.gallery-iframe {
+  max-width: 1000px;
+  width: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.05),
+    0 4px 14px rgba(0, 0, 0, 0.07);
+  transition: box-shadow 0.3s ease;
+  user-select: none;
+}
+
+/* IMAGE */
+.gallery-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* IFRAME / CALENDRIER */
+.calendar-container {
+  display: flex;
+  justify-content: center;
+  margin: 30px auto;
+  padding: 0 10px;
+}
+
+/* IFRAME pour le calendrier */
+.calendar-container iframe {
+  width: 100%;
+  max-width: 1000px;    /* largeur max identique au premier code */
+  height: 700px;        /* hauteur fixe identique au premier code */
+  margin: 0 auto;
+  display: block;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  transition: box-shadow 0.3s ease;
+  user-select: none;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1080px) {
+  .folders {
+    gap: 28px;
+  }
+  .folder {
+    width: 200px;
+    height: 170px;
+  }
+  h1 {
+    font-size: 2.8rem;
+  }
+}
+
+/* Responsive pour tablettes et petits écrans */
+@media (max-width: 720px) {
+  .folders {
+    gap: 22px;
+  }
+  .folder {
+    width: 170px;
+    height: 150px;
+  }
+  h1 {
+    font-size: 2.4rem;
+  }
+}
+
+/* Responsive pour mobiles */
+@media (max-width: 480px) {
+  .folders {
+    flex-direction: column;
+    gap: 18px;
+    padding: 10px 0 40px;
+  }
+  .folder {
+    width: 100%;
+    max-width: 280px;
+    height: 140px;
+  }
+  h1 {
+    font-size: 2.1rem;
+  }
+}
